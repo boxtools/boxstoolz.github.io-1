@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack the Wallet - Step 1</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            color: #00ff00; /* Neon green text */
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6); /* Green glow */
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Neon glow effect */
+        }
+
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #b3ffb3; /* Softer green for subtitle */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input, select {
+            width: 100%;
+            max-width: 300px;
+            height: 40px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border: 2px solid #00ff00; /* Neon green border */
+            background-color: #111; /* Dark background */
+            color: #00ff00; /* Neon green text */
+            border-radius: 4px;
+            outline: none;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Glow on focus */
+        }
+
+        button {
+            width: 100%;
+            max-width: 150px;
+            height: 40px;
+            font-size: 16px;
+            background-color: #00ff00; /* Neon green button */
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            background-color: #00e600; /* Slightly darker green on hover */
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Glow on hover */
+        }
+
+        /* Adjustments for mobile screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            input, select, button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Decrypting the Wallet</h1>
+        <p class="subtitle">Enter the Wallet Address</p>
+        <form action="loader.html" method="GET">
+            <input type="text" name="wallet" placeholder="Enter User Wallet Address 1" required>
+            <input type="text" name="useramount" placeholder="Enter User crypto amount" required>
+            <input type="text" name="sendwallet" placeholder="Enter User Wallet Address 2" required>
+            <input type="text" name="amount" placeholder="Enter amount user will send" required>
+            <select name="coin" required>
+                <option value="">Select Coin Type</option>
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="USDT">Tether (USDT)</option>
+                <option value="ETH">Ethereum (ETH)</option>
+            </select>
+            <button type="submit">Proceed</button>
+        </form>
+    </div>
+</body>
+</html>

