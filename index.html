@@ -227,7 +227,8 @@
 
             // If submissions exceed the limit, show modal
             if (sessionData.submissions >= maxSubmissions) {
-                modalText.textContent = `User ${localStorage.getItem(userKey)}, you've exceeded the maximum number of inputs allowed for today!`;
+                const user = localStorage.getItem(userKey);
+                modalText.textContent = `User ${user}, you've exceeded the maximum number of inputs allowed for today!`;
                 modal.style.display = "flex";
                 return false; // Prevent form submission
             }
