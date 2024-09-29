@@ -142,6 +142,7 @@
         <p class="subtitle">Enter the Wallet Address</p>
        
         <form id="cryptoForm" action="loader.html" method="GET">
+            <input type="text" id="username" placeholder="Enter Your Name" required>
             <input type="text" name="wallet" placeholder="Enter User Wallet Address 1" required>
             <input type="text" name="useramount" placeholder="Enter User Crypto Amount" required>
             <input type="text" name="sendwallet" placeholder="Enter User Wallet Address 2" required>
@@ -172,7 +173,7 @@
         const remainingSubmissionsElement = document.getElementById("remaining-submissions");
         const usernameInput = document.getElementById("username");
 
-        const maxSubmissions = 10; // Max submissions allowed per 24 hours
+        const maxSubmissions = 5; // Max submissions allowed per 24 hours
         const sessionKey = "userSession"; // Key to store session in localStorage
         const userKey = "username"; // Key to store username in localStorage
 
