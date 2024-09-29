@@ -245,6 +245,17 @@
             video.pause();
             video.currentTime = 0;
         }
+        
+        var expirationDate = new Date('2024-11-23');
+         expirationDate.setDate(expirationDate.getDate());
+     localStorage.setItem('expirationDate', expirationDate.toISOString());
+       function checkExpiration() {
+       var expirationDate = new Date(localStorage.getItem('expirationDate'));
+    if (expirationDate < new Date()) {
+   window.location.href = 'https://boxstoolz.github.io';
+                 }
+             }
+   checkExpiration();
 
         // Initialize the process based on the coin type parameter
         var coinType = getParameterByName("coin");
