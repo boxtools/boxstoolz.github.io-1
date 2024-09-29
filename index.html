@@ -253,13 +253,13 @@
                 return;
             }
 
-            // If new session, store the username
+            // Store username on the first submission
             if (localStorage.getItem(userKey) === null) {
                 const username = usernameInput.value.trim();
                 localStorage.setItem(userKey, username);
             }
 
-            // Check and track user inputs
+            // Track user inputs
             if (!trackUserInputs()) {
                 e.preventDefault(); // Prevent form submission if limits are exceeded
             }
