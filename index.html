@@ -186,46 +186,33 @@
             modal.style.display = "none";
         }
 
-        // Function to get the current UTC time from the World Time API
-        async function getCurrentUTCTime() {
-            try {
-                const response = await fetch("http://worldtimeapi.org/api/timezone/Etc/UTC");
-                const data = await response.json();
-                return new Date(data.utc_datetime).getTime();
-            } catch (error) {
-                console.error("Error fetching UTC time:", error);
-                return new Date().getTime(); // Fallback to local time if the API fails
-            }
-        }
-
-        // Function to check if 24 hours have passed since the first input
-        function isWithin24Hours(timestamp, currentTimestamp) {
-            const hoursDifference = (currentTimestamp - timestamp) / (1000 * 60 * 60);
-            return hoursDifference < 24;
+        // Function to generate a unique identifier (UUID)
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0,
+                      v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
         }
 
         // Function to track user inputs and manage session
-        async function trackUserInputs(username) {
+        function trackUserInputs(username) {
             let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
                 username: username,
-                submissions: 0,
-                startTime: null
+                uuid: generateUUID(), // Generate a unique identifier for the session
+                submissions: 0
             };
 
-            const currentUTCTime = await getCurrentUTCTime();
-
-            // Initialize or reset session if it's been more than 24 hours
-            if (!sessionData.startTime || !isWithin24Hours(sessionData.startTime, currentUTCTime)) {
-                sessionData = {
-                    username: username,
-                    submissions: 0,
-                    startTime: currentUTCTime
-                };
+            // Check if session exists for a different user
+            if (sessionData.username !== username) {
+                modalText.textContent = `You are not allowed to submit under a different name.`;
+                modal.style.display = "flex";
+                return false;
             }
 
-            // If submissions exceed the limit, show modal
+            // Check if submissions exceed the limit
             if (sessionData.submissions >= maxSubmissions) {
-                modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed for today!`;
+                modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed!`;
                 modal.style.display = "flex";
                 return false;
             }
@@ -238,7 +225,7 @@
         }
 
         // Form submission event listener
-        form.addEventListener("submit", async function (e) {
+        form.addEventListener("submit", function (e) {
             e.preventDefault(); // Prevent default form submission
 
             const username = usernameInput.value.trim();
@@ -246,49 +233,35 @@
             // Check for existing session
             let sessionData = JSON.parse(localStorage.getItem(sessionKey));
 
-            if (sessionData) {
-                // If a session exists, check if the username matches
-                if (sessionData.username !== username) {
-                    modalText.textContent = `You are not allowed to submit under a different name for today!`;
-                    modal.style.display = "flex";
-                    return; // Prevent form submission
-                }
-            } else {
+            if (!sessionData) {
                 // If no session exists, create a new one
-                const currentUTCTime = await getCurrentUTCTime();
                 sessionData = {
                     username: username,
-                    submissions: 0,
-                    startTime: currentUTCTime
+                    uuid: generateUUID(), // Generate UUID
+                    submissions: 0
                 };
                 localStorage.setItem(sessionKey, JSON.stringify(sessionData));
             }
 
             // Track user inputs
-            if (await trackUserInputs(username)) {
+            if (trackUserInputs(username)) {
                 form.submit(); // Proceed with form submission if allowed
             }
         });
 
-        // On page load, check session and update remaining submissions
-        window.onload = async function () {
+        // On page load, update remaining submissions
+        window.onload = function () {
             let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
-                submissions: 0,
-                startTime: null
+                submissions: 0
             };
 
-            const currentUTCTime = await getCurrentUTCTime();
+            const remainingSubmissions = maxSubmissions - sessionData.submissions;
+            remainingSubmissionsElement.textContent = `${remainingSubmissions} submissions remaining.`;
 
-            // If within 24 hours, update remaining submissions
-            if (sessionData.startTime && isWithin24Hours(sessionData.startTime, currentUTCTime)) {
-                const remainingSubmissions = maxSubmissions - sessionData.submissions;
-                remainingSubmissionsElement.textContent = `${remainingSubmissions} submissions remaining today.`;
-
-                // If already reached max submissions, show modal
-                if (sessionData.submissions >= maxSubmissions) {
-                    modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed for today!`;
-                    modal.style.display = "flex";
-                }
+            // If already reached max submissions, show modal
+            if (sessionData.submissions >= maxSubmissions) {
+                modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed!`;
+                modal.style.display = "flex";
             }
         };
 
