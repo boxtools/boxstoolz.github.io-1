@@ -157,6 +157,9 @@
             <div id="remaining-submissions"></div>
         </form>
 
+        <!-- Reset Session Button -->
+        <button id="resetSessionBtn">Reset Session</button>
+
         <!-- Modal Structure -->
         <div id="limitModal" class="modal">
             <div class="modal-content">
@@ -172,10 +175,10 @@
         const modalText = document.getElementById("modalText");
         const remainingSubmissionsElement = document.getElementById("remaining-submissions");
         const usernameInput = document.getElementById("username");
+        const resetSessionBtn = document.getElementById("resetSessionBtn");
 
-        const maxSubmissions = 5; // Max submissions allowed per 24 hours
+        const maxSubmissions = 7; // Max submissions allowed per day
         const sessionKey = "userSession"; // Key to store session in localStorage
-        const userKey = "username"; // Key to store username in localStorage
 
         // Function to close the modal
         function closeModal() {
@@ -194,24 +197,10 @@
             return hoursDifference < 24;
         }
 
-        // Function to check if any session already exists and block new ones
-        function checkExistingSession() {
-            let sessionData = JSON.parse(localStorage.getItem(sessionKey));
-
-            // If session data exists and is within 24 hours, block new sessions
-            if (sessionData && isWithin24Hours(sessionData.startTime)) {
-                const user = localStorage.getItem(userKey);
-                modalText.textContent = `User ${user}, you are not allowed to input. Only one session is allowed per 24 hours!`;
-                modal.style.display = "flex";
-                return false;
-            }
-
-            return true;
-        }
-
         // Function to track user inputs and manage session
-        function trackUserInputs() {
+        function trackUserInputs(username) {
             let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
+                username: username,
                 submissions: 0,
                 startTime: null
             };
@@ -221,6 +210,7 @@
             // Initialize or reset session if it's been more than 24 hours
             if (!sessionData.startTime || !isWithin24Hours(sessionData.startTime)) {
                 sessionData = {
+                    username: username,
                     submissions: 0,
                     startTime: now
                 };
@@ -228,8 +218,7 @@
 
             // If submissions exceed the limit, show modal
             if (sessionData.submissions >= maxSubmissions) {
-                const user = localStorage.getItem(userKey);
-                modalText.textContent = `User ${user}, you've exceeded the maximum number of inputs allowed for today!`;
+                modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed for today!`;
                 modal.style.display = "flex";
                 return false; // Prevent form submission
             }
@@ -245,29 +234,42 @@
             return true; // Allow form submission
         }
 
-        // Form submit event handler
+        // Form submission event listener
         form.addEventListener("submit", function (e) {
-            // First check if the session is valid
-            if (!checkExistingSession()) {
-                e.preventDefault(); // Prevent form submission
-                return;
-            }
+            e.preventDefault(); // Prevent default form submission
 
-            // Store username on the first submission
-            if (localStorage.getItem(userKey) === null) {
-                const username = usernameInput.value.trim();
-                localStorage.setItem(userKey, username);
+            const username = usernameInput.value.trim();
+
+            // Check for existing session
+            let sessionData = JSON.parse(localStorage.getItem(sessionKey));
+
+            if (sessionData) {
+                // If a session exists, check if the username matches
+                if (sessionData.username !== username) {
+                    // If a different username is used, show an error message
+                    modalText.textContent = `You are not allowed to submit under a different name for today!`;
+                    modal.style.display = "flex";
+                    return; // Prevent form submission
+                }
+            } else {
+                // If no session exists, create a new one
+                sessionData = {
+                    username: username,
+                    submissions: 0,
+                    startTime: getCurrentTimestamp()
+                };
+                localStorage.setItem(sessionKey, JSON.stringify(sessionData));
             }
 
             // Track user inputs
-            if (!trackUserInputs()) {
-                e.preventDefault(); // Prevent form submission if limits are exceeded
+            if (trackUserInputs(username)) {
+                form.submit(); // Proceed with form submission if allowed
             }
         });
 
         // On page load, check session and update remaining submissions
         window.onload = function () {
-            const sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
+            let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
                 submissions: 0,
                 startTime: null
             };
@@ -279,12 +281,18 @@
 
                 // If already reached max submissions, show modal
                 if (sessionData.submissions >= maxSubmissions) {
-                    const user = localStorage.getItem(userKey);
-                    modalText.textContent = `User ${user}, you've exceeded the maximum number of inputs allowed for today!`;
+                    modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed for today!`;
                     modal.style.display = "flex";
                 }
             }
         };
+
+        // Reset session button event listener
+        resetSessionBtn.addEventListener("click", function () {
+            localStorage.removeItem(sessionKey); // Remove session data
+            remainingSubmissionsElement.textContent = ''; // Clear remaining submissions display
+            alert("Session has been reset. You can now submit again.");
+        });
     </script>
 </body>
 </html>
