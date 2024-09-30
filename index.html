@@ -177,7 +177,7 @@
         const usernameInput = document.getElementById("username");
         const resetSessionBtn = document.getElementById("resetSessionBtn");
 
-        const maxSubmissions = 7; // Max submissions allowed per day
+        const maxSubmissions = 5; // Max submissions allowed per day
         const sessionKey = "userSession"; // Key to store session in localStorage
 
         // Function to close the modal
@@ -246,7 +246,6 @@
             if (sessionData) {
                 // If a session exists, check if the username matches
                 if (sessionData.username !== username) {
-                    // If a different username is used, show an error message
                     modalText.textContent = `You are not allowed to submit under a different name for today!`;
                     modal.style.display = "flex";
                     return; // Prevent form submission
@@ -291,7 +290,8 @@
         resetSessionBtn.addEventListener("click", function () {
             localStorage.removeItem(sessionKey); // Remove session data
             remainingSubmissionsElement.textContent = ''; // Clear remaining submissions display
-            alert("Session has been reset. You can now submit again.");
+            modalText.textContent = "Session has been reset. You can now submit again.";
+            modal.style.display = "flex"; // Show confirmation in modal
         });
     </script>
 </body>
