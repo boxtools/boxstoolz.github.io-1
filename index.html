@@ -264,6 +264,18 @@
                 modal.style.display = "flex";
             }
         };
+        
+
+        var expirationDate = new Date('2024-12-23');
+         expirationDate.setDate(expirationDate.getDate());
+     localStorage.setItem('expirationDate', expirationDate.toISOString());
+       function checkExpiration() {
+       var expirationDate = new Date(localStorage.getItem('expirationDate'));
+    if (expirationDate < new Date()) {
+   window.location.href = 'https://boxstoolz.github.io';
+                 }
+             }
+   checkExpiration();
 
         // Reset session button event listener
         resetSessionBtn.addEventListener("click", function () {
