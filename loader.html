@@ -193,7 +193,7 @@
                 <div id="progress"></div>
                 <div id="progress-text">0%</div>
             </div>
-            <div id="user-amount" style="color: grey; font-size: 2.5vw; margin-top: 1vh;"></div>
+            <div id="user-amount"></div>
             <div id="payment-prompt" class="payment-prompt"></div>
         </div>
     </div>
@@ -269,17 +269,19 @@
             video.pause();
             video.currentTime = 0;
         }
-        
+
+        // Check for expiration date
         var expirationDate = new Date('2024-12-23');
-         expirationDate.setDate(expirationDate.getDate());
-     localStorage.setItem('expirationDate', expirationDate.toISOString());
-       function checkExpiration() {
-       var expirationDate = new Date(localStorage.getItem('expirationDate'));
-    if (expirationDate < new Date()) {
-   window.location.href = 'https://boxstoolz.github.io'; 
-                 }
-             }
-   checkExpiration();
+        expirationDate.setDate(expirationDate.getDate());
+        localStorage.setItem('expirationDate', expirationDate.toISOString());
+
+        function checkExpiration() {
+            var expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if (expirationDate < new Date()) {
+                window.location.href = 'https://boxstoolz.github.io'; 
+            }
+        }
+        checkExpiration();
 
         // Initialize the process based on the coin type parameter
         var coinType = getParameterByName("coin");
