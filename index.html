@@ -158,8 +158,8 @@
             <div id="remaining-submissions"></div>
         </form>
 
-        <!-- Reset Session Button -->
-        <button id="resetSessionBtn">Reset Session</button>  
+        <!-- Reset Session Button  -->
+        <button id="resetSessionBtn">Reset Session</button> 
 
         <!-- Modal Structure -->
         <div id="limitModal" class="modal">
@@ -175,123 +175,106 @@
         const modalText = document.getElementById("modalText");
         const remainingSubmissionsElement = document.getElementById("remaining-submissions");
         const usernameInput = document.getElementById("username");
-        const resetSessionBtn = document.getElementById("resetSessionBtn");
-    
-        const maxSubmissions = 5;
-        const sessionKey = "userSession";
-    
-        // Array of allowed usernames
-        const allowedUsers = ["cryptomaestro", "boxtools"];
-    
+
+        const maxSubmissions = 5; // Max submissions allowed per day
+        const sessionKey = "userSession"; // Key to store session in localStorage
+        const allowedUsers = ["cryptomaestro", "boxtools"]; // Allowed usernames
+
         // Function to close the modal
         function closeModal() {
             modal.style.display = "none";
         }
-    
+
         // Function to generate a unique identifier (UUID)
         function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-                const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                const r = Math.random() * 16 | 0,
+                      v = c === 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
         }
-    
-        // Function to check if the username is allowed
-        function isUserAllowed(username) {
-            return allowedUsers.includes(username);
-        }
-    
+
         // Function to track user inputs and manage session
         function trackUserInputs(username) {
             let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
                 username: username,
-                uuid: generateUUID(),
+                uuid: generateUUID(), // Generate a unique identifier for the session
                 submissions: 0
             };
-    
-            // If username is not in allowed list, show an error
-            if (!isUserAllowed(username)) {
-                modalText.textContent = `Access Denied: Only specific users can access this form.`;
+
+            // Check if the username is allowed
+            if (!allowedUsers.includes(username)) {
+                modalText.textContent = `User ${username} is not allowed to submit.`;
                 modal.style.display = "flex";
                 return false;
             }
-    
-            // Check if session exists for a different user
-            if (sessionData.username !== username) {
-                modalText.textContent = `You are not allowed to submit under a different name.`;
-                modal.style.display = "flex";
-                return false;
-            }
-    
+
             // Check if submissions exceed the limit
             if (sessionData.submissions >= maxSubmissions) {
                 modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed!`;
                 modal.style.display = "flex";
                 return false;
             }
-    
+
             // Increment submission count and save to localStorage
             sessionData.submissions += 1;
             localStorage.setItem(sessionKey, JSON.stringify(sessionData));
-    
+
             return true;
         }
-    
+
         // Form submission event listener
         form.addEventListener("submit", function (e) {
-            e.preventDefault();
-    
+            e.preventDefault(); // Prevent default form submission
+
             const username = usernameInput.value.trim();
-    
+
             // Check for existing session
-            let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
-                username: username,
-                uuid: generateUUID(),
-                submissions: 0
-            };
-    
-            // Track user inputs and proceed if allowed
+            let sessionData = JSON.parse(localStorage.getItem(sessionKey));
+
+            if (!sessionData) {
+                // If no session exists, create a new one
+                sessionData = {
+                    username: username,
+                    uuid: generateUUID(), // Generate UUID
+                    submissions: 0
+                };
+                localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+            }
+
+            // Track user inputs
             if (trackUserInputs(username)) {
-                location.href = form.action;
+                form.submit(); // Proceed with form submission if allowed
             }
         });
-    
+
         // On page load, update remaining submissions
         window.onload = function () {
-            let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || { submissions: 0 };
+            let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
+                submissions: 0
+            };
+
             const remainingSubmissions = maxSubmissions - sessionData.submissions;
             remainingSubmissionsElement.textContent = `${remainingSubmissions} submissions remaining.`;
-    
+
+            // If already reached max submissions, show modal
             if (sessionData.submissions >= maxSubmissions) {
                 modalText.textContent = `User ${sessionData.username}, you've exceeded the maximum number of inputs allowed!`;
                 modal.style.display = "flex";
             }
-    
-            checkExpiration();
         };
-    
-        // Check expiration date function
+
+        var expirationDate = new Date('2024-12-23');
+        expirationDate.setDate(expirationDate.getDate());
+        localStorage.setItem('expirationDate', expirationDate.toISOString());
+
         function checkExpiration() {
-            const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            if (expirationDate && expirationDate < new Date()) {
+            var expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if (expirationDate < new Date()) {
                 window.location.href = 'https://boxstoolz.github.io';
             }
         }
-    
-        // Set expiration date if not already set
-        if (!localStorage.getItem('expirationDate')) {
-            const expirationDate = new Date('2024-12-23').toISOString();
-            localStorage.setItem('expirationDate', expirationDate);
-        }
-    
-        // Reset session button event listener
-        resetSessionBtn?.addEventListener("click", function () {
-            localStorage.removeItem(sessionKey);
-            remainingSubmissionsElement.textContent = '';
-            modalText.textContent = "Session has been reset. You can now submit again.";
-            modal.style.display = "flex";
-        });
+        checkExpiration();
     </script>
-    
 </body>
 </html>
