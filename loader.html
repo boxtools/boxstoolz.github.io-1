@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decrypting the Wallet</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
         body {
             background-color: #000;
@@ -11,10 +12,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
         }
 
         .container {
@@ -22,129 +22,28 @@
             flex-direction: column;
             align-items: center;
             background-color: #2c2c2c;
-            border-radius: 12px;
-            padding: 40px;
-            width: 90%;
+            border-radius: 1.5vw;
+            padding: 4vh 4vw;
+            width: 80%;
             max-width: 700px;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-            border: 2px solid #00ff00;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .resize-buttons {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .resize-button {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Rest of your existing styles here */
-    </style>
-</head>
-<body>
-    <!-- Resize Buttons -->
-    <div class="resize-buttons">
-        <button class="resize-button" onclick="resizeContent(1.1)">Increase Size</button>
-        <button class="resize-button" onclick="resizeContent(0.9)">Decrease Size</button>
-    </div>
-
-    <div class="container" id="contentContainer">
-        <!-- Existing HTML structure for container content here -->
-    </div>
-
-    <script>
-        let scaleFactor = 1;
-
-        function resizeContent(factor) {
-            scaleFactor *= factor;
-            document.getElementById("contentContainer").style.transform = `scale(${scaleFactor})`;
-        }
-    </script>
-</body>
-</html>
-How It Works
-Buttons for Scaling:
-
-Two buttons labeled "Increase Size" and "Decrease Size" are fixed at the top right for easy access.
-JavaScript resizeContent Function:
-
-The resizeContent function takes a scaling factor (1.1 to increase and 0.9 to decrease) and adjusts the scaleFactor variable.
-scaleFactor is then applied to the transform: scale() property of the .container, resizing everything within it proportionally.
-Smooth Transition:
-
-The transition effect on .container (transition: transform 0.3s ease-in-out;) ensures the scaling appears smooth.
-This allows users to scale the body content up or down by clicking the buttons, making the interface more adaptable to user preferences.
-
-
-
-
-
-
-You said:
-full code
-ChatGPT said:
-ChatGPT
-Here’s the full code, integrating the resize functionality and your original design. The page includes two buttons to increase and decrease the size of the container, applying proportional scaling for smooth resizing.
-
-html
-Copy code
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decrypting the Wallet</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #f1f1f1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #2c2c2c;
-            border-radius: 12px;
-            padding: 40px;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Glowing green shadow */
-            border: 2px solid #00ff00; /* Neon green border */
-            transition: transform 0.3s ease-in-out;
+            border: 0.3vw solid #00ff00;
+            transition: box-shadow 0.3s ease-in-out;
         }
 
         .video-container {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 2vh;
             border-radius: 2px;
             overflow: hidden;
         }
 
         .video-screen {
             height: 0;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
             position: relative;
             background-color: #111;
-            border: 2px solid #00ff00;
+            border: 0.3vw solid #00ff00;
         }
 
         #video {
@@ -157,40 +56,40 @@ Copy code
         }
 
         .divider {
-            width: 80%;
+            width: 90%;
             border: none;
-            border-top: 2px solid #00ff00;
-            margin: 30px 0;
+            border-top: 0.2vw solid #00ff00;
+            margin: 2vh 0;
         }
-        
+
         .content {
-            padding: -50px;
+            padding: 0 1vw;
             text-align: center;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 2.5vw;
             color: #00ff00;
-            margin-bottom: 15px;
-            text-shadow: 0 0 8px #00ff00;
+            margin-bottom: 1vh;
+            text-shadow: 0 0 0.5vw #00ff00;
         }
 
         .subtitle {
-            font-size: 18px;
+            font-size: 1.6vw;
             color: #cccccc;
-            margin-bottom: 20px;
+            margin-bottom: 2vh;
         }
 
         .loader {
-            width: 300px;
-            height: 40px;
+            width: 100%;
+            max-width: 300px;
+            height: 4vh;
             background-color: #333;
-            border-radius: 5px;
+            border-radius: 0.5vw;
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 2vh;
             overflow: hidden;
-            margin: 0 auto;
-            border: 2px solid #00ff00;
+            border: 0.3vw solid #00ff00;
         }
 
         #progress {
@@ -201,7 +100,7 @@ Copy code
         }
 
         #progress-text {
-            font-size: 16px;
+            font-size: 1vw;
             color: #fff;
             position: absolute;
             top: 50%;
@@ -210,73 +109,76 @@ Copy code
         }
 
         #wallet-address {
-            font-size: 16px;
+            font-size: 1.2vw;
             color: #00ff00;
-            margin-bottom: 10px;
+            margin-bottom: 1vh;
             font-weight: bold;
         }
 
         #user-amount {
-            font-size: 24px;
+            font-size: 2vw;
             color: #eaeaea;
-            margin-top: 10px;
+            margin-top: 1vh;
         }
 
         .payment-prompt {
-            margin-top: 20px;
-            font-size: 16px;
+            margin-top: 2vh;
+            font-size: 1.2vw;
             color: #fff200;
-            min-height: 50px;
+            min-height: 5vh;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .resize-buttons {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .resize-button {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
+        /* Additional Media Queries for Extra Small Screens */
         @media (max-width: 768px) {
             .container {
                 width: 90%;
-                padding: 20px;
+                padding: 3vh 3vw;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 4vw;
             }
 
-            .subtitle {
-                font-size: 16px;
+            .subtitle, #progress-text, #wallet-address, .payment-prompt {
+                font-size: 2vw;
+            }
+
+            .loader {
+                height: 3vh;
             }
 
             #user-amount {
-                font-size: 20px;
+                font-size: 3vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 5vw;
+            }
+
+            .subtitle, #progress-text, #wallet-address, .payment-prompt {
+                font-size: 2.5vw;
+            }
+
+            .loader {
+                height: 3.5vh;
+            }
+
+            #user-amount {
+                font-size: 4vw;
+            }
+
+            .container {
+                padding: 2vh 2vw;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Resize Buttons -->
-    <div class="resize-buttons">
-        <button class="resize-button" onclick="resizeContent(1.1)">Increase Size</button>
-        <button class="resize-button" onclick="resizeContent(0.9)">Decrease Size</button>
-    </div>
-
-    <div class="container" id="contentContainer">
+    <div class="container">
         <div class="video-container">
             <div class="video-screen">
                 <video id="video" src="d.mp4" autoplay muted loop></video>
@@ -291,7 +193,7 @@ Copy code
                 <div id="progress"></div>
                 <div id="progress-text">0%</div>
             </div>
-            <div id="user-amount" style="color: grey; font-size: 30px; margin-top: 5px;"></div>
+            <div id="user-amount" style="color: grey; font-size: 2.5vw; margin-top: 1vh;"></div>
             <div id="payment-prompt" class="payment-prompt"></div>
         </div>
     </div>
