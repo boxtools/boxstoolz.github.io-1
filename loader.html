@@ -15,6 +15,7 @@
             height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
         }
 
         .container {
@@ -24,14 +25,12 @@
             background-color: #2c2c2c;
             border-radius: 12px;
             padding: 40px;
-            width: 50%;
+            width: 90%;
             max-width: 700px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); /* Glowing green shadow */
-            border: 2px solid #00ff00; /* Neon green border */
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            border: 2px solid #00ff00;
             transition: box-shadow 0.3s ease-in-out;
         }
-
-      
 
         .video-container {
             width: 100%;
@@ -45,7 +44,7 @@
             padding-bottom: 56.25%;
             position: relative;
             background-color: #111;
-            border: 2px solid #00ff00; /* Green border around video */
+            border: 2px solid #00ff00;
         }
 
         #video {
@@ -60,43 +59,44 @@
         .divider {
             width: 80%;
             border: none;
-            border-top: 2px solid #00ff00; /* Neon green divider */
+            border-top: 2px solid #00ff00;
             margin: 30px 0;
         }
+
         .content {
             padding: -50px;
             text-align: center;
         }
 
         h1 {
-            font-size: 28px;
-            color: #00ff00; /* Neon green text */
+            font-size: 2rem;
+            color: #00ff00;
             margin-bottom: 15px;
             text-shadow: 0 0 8px #00ff00;
         }
 
         .subtitle {
-            font-size: 18px;
+            font-size: 1.2rem;
             color: #cccccc;
             margin-bottom: 20px;
         }
 
         .loader {
-            width: 300px;
+            width: 100%;
+            max-width: 300px;
             height: 40px;
             background-color: #333;
             border-radius: 5px;
             position: relative;
             margin-bottom: 20px;
             overflow: hidden;
-            margin: 0 auto;
-            border: 2px solid #00ff00; /* Green border around loader */
+            border: 2px solid #00ff00;
         }
 
         #progress {
             width: 0;
             height: 100%;
-            background-color: #fa0000; /* Green progress bar */
+            background-color: #fa0000;
             transition: width 0.8s ease-in-out;
         }
 
@@ -110,43 +110,66 @@
         }
 
         #wallet-address {
-            font-size: 16px;
-            color: #00ff00; /* Green text for wallet address */
+            font-size: 1rem;
+            color: #00ff00;
             margin-bottom: 10px;
             font-weight: bold;
         }
 
         #user-amount {
-            font-size: 24px;
+            font-size: 1.5rem;
             color: #eaeaea;
             margin-top: 10px;
         }
 
         .payment-prompt {
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 1rem;
             color: #fff200;
-            min-height: 50px; /* Fixed height to prevent expansion */
-            overflow: hidden; /* Ensure content stays within this size */
+            min-height: 50px;
+            overflow: hidden;
             text-overflow: ellipsis;
         }
 
+        /* Responsive Styles */
         @media (max-width: 768px) {
             .container {
-                width: 90%;
+                width: 95%;
                 padding: 20px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 1.5rem;
             }
 
             .subtitle {
-                font-size: 16px;
+                font-size: 1rem;
             }
 
             #user-amount {
-                font-size: 20px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .subtitle, #wallet-address, #progress-text, .payment-prompt {
+                font-size: 0.9rem;
+            }
+
+            .loader {
+                height: 30px;
+            }
+
+            #user-amount {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 10px;
             }
         }
     </style>
