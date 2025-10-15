@@ -1,0 +1,118 @@
+<!-- save as report.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Report an Incident — Secure Reporting Hub</title>
+  <style>
+    :root{
+      --bg:#0f1113;
+      --card:#111317;
+      --muted:#9aa3af;
+      --accent:#7c5cff;
+      --glass: rgba(255,255,255,0.03);
+      --danger:#ff6b6b;
+      --maxw:900px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;background:linear-gradient(180deg,#07080a 0%, #0b0d10 100%);color:#e6eef8;margin:0}
+    .wrap{max-width:var(--maxw);margin:36px auto;padding:24px;box-sizing:border-box}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .logo{width:52px;height:52px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:700}
+    h1{margin:0;font-size:1.4rem}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 30px rgba(0,0,0,0.6);backdrop-filter: blur(6px)}
+    label{display:block;margin-top:12px;font-size:0.85rem;color:var(--muted)}
+    input[type="text"], input[type="email"], select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit;box-sizing:border-box;margin-top:6px}
+    textarea{min-height:140px;resize:vertical}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .actions{display:flex;gap:8px;margin-top:16px;align-items:center}
+    .btn{padding:10px 14px;border-radius:8px;border:0;background:var(--accent);color:#061226;font-weight:600;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)}
+    .hint{font-size:0.85rem;color:var(--muted);margin-top:8px}
+    .small{font-size:0.85rem;color:var(--muted)}
+    footer{margin-top:14px;color:var(--muted);font-size:0.82rem}
+    .warning{background:rgba(255,107,107,0.06);padding:10px;border-radius:8px;margin-top:10px;border:1px solid rgba(255,107,107,0.06);color:var(--danger)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">SR</div>
+      <div>
+        <h1>Secure Reporting Hub</h1>
+        <p class="lead">Report scams, suspicious transactions, and compromised accounts. We document incidents and forward evidence to the appropriate authorities or analytic partners.</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <form id="reportForm" autocomplete="off" method="post" action="/api/submit">
+        <label>Type of incident
+          <select name="incident_type" required>
+            <option value="">— select —</option>
+            <option>Phishing / Scam</option>
+            <option>Impersonation</option>
+            <option>Extortion</option>
+            <option>Suspicious transaction (crypto)</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <div class="row">
+          <label>Platform / Channel
+            <input name="channel" type="text" placeholder="Email, Marketplace, Exchange, Social" />
+          </label>
+          <label>Date of incident
+            <input name="date" type="text" placeholder="YYYY-MM-DD (optional)" />
+          </label>
+        </div>
+
+        <label>Paste full message or email text (include headers if possible)
+          <textarea name="message_text" placeholder="Copy the email or paste the full message here" required></textarea>
+        </label>
+
+        <label>Attach files (screenshots, .eml, logs) — max 8MB
+          <input name="evidence" type="file" />
+        </label>
+
+        <label>Crypto evidence (if applicable)
+          <input name="txid" type="text" placeholder="Transaction ID (TXID)" />
+          <div class="hint">Include chain (e.g., Bitcoin/Ethereum), exact TXID, wallet addresses and timestamps.</div>
+        </label>
+
+        <label>Contact email (optional — for follow-up)
+          <input name="contact" type="email" placeholder="you@example.com" />
+          <div class="hint">If you prefer encrypted replies, include a PGP public key in the message text.</div>
+        </label>
+
+        <div class="warning">
+          <strong>Important:</strong> We are a reporting hub. We document and forward evidence. We do not promise fund recovery. For immediate help, contact your local law enforcement and the exchange involved.
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit">Submit report</button>
+          <button class="btn ghost" type="button" onclick="document.getElementById('reportForm').reset()">Clear</button>
+        </div>
+
+      </form>
+    </div>
+
+    <footer>
+      <div class="small">By submitting you consent to limited use of this data to investigate and, where appropriate, share with law enforcement and trusted partners. See Privacy & Terms.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Minimal client-side: intercept form and post JSON
+    document.getElementById('reportForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const obj = {};
+      fd.forEach((v,k)=>{ obj[k]=v instanceof File ? '[file-attached]' : v; });
+      // real implementation should post as multipart/form-data to server endpoint
+      alert('This demo page only shows UI. Integrate with your backend /api/submit to collect reports.');
+    });
+  </script>
+</body>
+</html>
